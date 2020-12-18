@@ -1,12 +1,13 @@
 from flask import Flask,render_template,request
 from flask_cors import CORS,cross_origin
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler
 
 import pickle
 
 app=Flask(__name__)
-model=pickle.load(open('finalized_model_v1.pickle','rb'))
-standard_to=StandardScaler()
+#model=pickle.load(open('finalized_model_v1.pickle','rb'))
+
 
 
 @app.route('/',methods=['GET'])
@@ -15,21 +16,25 @@ def Home():
     return render_template('index.html')
 
 
-
-@app.route('/',methods=['POST'])
+scaler=StandardScaler()
+@app.route('/predict',methods=['POST','GET'])
 @cross_origin()
 def predict():
     Fuel_Type_Diesel=0
     if request.method=='POST':
-        Present_Price=int(request.form['Present_Price'])
-        Present_Price_scaled = standard_to.fit_transform(Present_Price)
+        Year = int(request.form['Year'])
+        Year = 2020 - Year
+        Year_scaled=scaler.fit_transform([[Year]])
+
+        Present_Price=float(request.form['Present_Price'])
+        Present_Price_scaled=scaler.fit_transform(([[Present_Price]]))
+
 
         Kms_Driven=int(request.form['Kms_Driven'])
-        Kms_Driven_scaled = standard_to.fit_transform(Kms_Driven)
+        Kms_Driven_scaled=scaler.fit_transform([[Kms_Driven]])
 
-        Year=int(request.form['Year'])
-        Year = 2020 - Year
-        Year_scaled = standard_to.fit_transform(Year)
+
+
 
         Fuel_Type_Petrol=request.form['Fuel_Type_Petrol']
         if (Fuel_Type_Petrol=='Petrol'):
@@ -54,17 +59,23 @@ def predict():
         else:
             Transmission_Manual=0
 
-
-        #prediction=model.predict(np.array([Present_Price_scaled,Kms_Driven_scaled,Year_scaled,Fuel_Type_Diesel,Fuel_Type_Petrol,Seller_Type_Individual,Transmission_Manual]).reshape(-1,1))
-        prediction = model.predict([[[Present_Price_scaled, Kms_Driven_scaled, Year_scaled, Fuel_Type_Diesel, Fuel_Type_Petrol,Seller_Type_Individual,Transmission_Manual]]])
+        model = pickle.load(open('finalized_model_v1.pickle', 'rb'))
+        #prediction = model.predict([[Present_Price_scaled, Kms_Driven_scaled, Year_scaled, Fuel_Type_Diesel, Fuel_Type_Petrol,Seller_Type_Individual,Transmission_Manual]])
+        #prediction = model.predict([[Present_Price, Kms_Driven, Year, Fuel_Type_Diesel, Fuel_Type_Petrol,Seller_Type_Individual, Transmission_Manual]])
+        var = [Present_Price_scaled, Kms_Driven_scaled, Year_scaled, Fuel_Type_Diesel, Fuel_Type_Petrol, Seller_Type_Individual,
+               Transmission_Manual]
+        prediction = model.predict([var])
         output=round(prediction[0],2)
+        print(var)
+
         print('prediction is', output)
+
         if output<0:
-            return render_template('index.html',prediction_texts='Sorry')
+            return render_template('results.html',prediction='Sorry')
         else:
-            return render_template('index.html',prediction_texts='You can sell the car for {}'.format(output))
+            return render_template('results.html',prediction=output)
     else:
-        return render_template('index.html')
+        return render_template('results.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
