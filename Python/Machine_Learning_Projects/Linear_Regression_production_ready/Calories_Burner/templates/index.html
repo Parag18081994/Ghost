@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+
+<title>Search Page</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">Predict Your calories burnt after exercising</h1>
+
+    <div class="form">
+        <form action="/predict" method="POST">
+            <input type="number" name="duration" id="duration" placeholder="Enter duration of exercise">
+            <input type="number" name="heart_rate" id="heart_rate" placeholder="Enter your heart rate">
+            <input type="number" name="body_temp" id="body_temp" placeholder="Enter your body temperature">
+
+            <input type="submit" value="Predict">
+        </form>
+    </div>
+</div>
+{% endblock %}
