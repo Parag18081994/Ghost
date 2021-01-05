@@ -12,15 +12,15 @@ def homepage():
 def prediction():
     if request.method=='POST':
         try:
-            duration=float(request.form('duration'))
-            heart_rate=float(request.form('heart_rate'))
-            body_temp=float(request.form('body_temp'))
+            duration=float(request.form['duration'])
+            heart_rate=float(request.form['heart_rate'])
+            body_temp=float(request.form['body_temp'])
 
             filename ='Calorie_burner_unscaled.pickle'
             loaded_model=pickle.load(open(filename,'rb'))
             prediction=loaded_model.predict([[duration,heart_rate,body_temp]])
             print('prediction is ',prediction)
-            return  render_template('result.html',prediction)
+            return  render_template('result.html', prediction=prediction[0])
         except Exception as e:
             print("The exception message is-",e)
             return "Something is wrong"
