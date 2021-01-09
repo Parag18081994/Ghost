@@ -19,8 +19,8 @@ def prediction():
             filename ='Calorie_burner_unscaled.pickle'
             loaded_model=pickle.load(open(filename,'rb'))
             prediction=loaded_model.predict([[duration,heart_rate,body_temp]])
-            print('prediction is ',prediction)
-            return  render_template('result.html', prediction=prediction[0])
+            print('prediction is ',prediction[0])
+            return render_template('result.html',prediction=prediction[0],duration=duration)
         except Exception as e:
             print("The exception message is-",e)
             return "Something is wrong"
