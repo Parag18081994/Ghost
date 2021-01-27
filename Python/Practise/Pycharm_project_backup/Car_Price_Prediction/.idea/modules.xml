@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Car_Price_Prediction.iml" filepath="$PROJECT_DIR$/.idea/Car_Price_Prediction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Flask_tut/.idea/Flask_tut.iml" filepath="$PROJECT_DIR$/../Flask_tut/.idea/Flask_tut.iml" />
+      <module fileurl="file://$USER_HOME$/Machine_Learning_Projects/Linear_Regression/MachineLearningModelToHeroku-master/MLForCloudDeployment_Heroku/.idea/MLForCloudDeployment_Heroku.iml" filepath="$USER_HOME$/Machine_Learning_Projects/Linear_Regression/MachineLearningModelToHeroku-master/MLForCloudDeployment_Heroku/.idea/MLForCloudDeployment_Heroku.iml" />
+    </modules>
+  </component>
+</project>
