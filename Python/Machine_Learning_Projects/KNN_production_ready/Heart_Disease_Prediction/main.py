@@ -5,7 +5,18 @@ import pandas as pd
 
 import pickle
 app=Flask(__name__)
-scaler=StandardScaler()
+
+
+def predict_log(df):
+	with open("standardScalar.sav",'rb') as f:
+    	scaler = pickle.load(f)
+    col_scale=['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+    df[col_scale] = scaler.transform(df[col_scale])
+    with open("modelForPrediction.sav",'rb') as f:
+        model=pickle.load(f)
+    prediction=model.predict(df)
+    return prediction[0]
+
 
 @app.route("/",methods=['GET'])
 def homepage():
@@ -16,7 +27,7 @@ def prediction():
     if request.method=='POST':
         try:
             age=int(request.form['age'])
-            #age_scaled=scaler.transform(age)
+           
 
             sex=int(request.form['sex'])
             if sex==0:
@@ -36,10 +47,10 @@ def prediction():
 
 
             trestbps=float(request.form['trestbps'])
-            #trestbps_scaled=scaler.transform(trestbps)
+           
 
             chol=float(request.form['chol'])
-            #chol_scaled=scaler.transform(chol)
+           
 
             fbs=int(request.form['fbs'])
             if fbs==0:
@@ -57,7 +68,7 @@ def prediction():
 
 
             thalach=float(request.form['thalach'])
-            #thalach_scaled=scaler.transform(thalach)
+           
 
             exang=float(request.form['exang'])
             if exang==0:
@@ -66,7 +77,7 @@ def prediction():
                 exang_1=1
 
             oldpeak=int(request.form['oldpeak'])
-           # oldpeak_scaled=scaler.transform(oldpeak)
+           
 
             slope=int(request.form['slope'])
             if slope==1:
@@ -95,36 +106,25 @@ def prediction():
             else:
                 thal_6,thal_7=0,1
 
-            #print(age, trestbps, chol, thalach, oldpeak, sex_1,cp_2, cp_3, cp_4, fbs_1,restecg_1, restecg_2, exang_1,slope_2,slope_3,ca_1,ca_2,ca_3,thal_6,thal_7)
+           
             dic={'age':age,'trestbps': trestbps,'chol':chol,'thalach':thalach, 'oldpeak':oldpeak,"sex_1":sex_1,"cp_2":cp_2,"cp_3":cp_3,"cp_4":cp_4,"fbs_1":fbs_1,"restecg_1":restecg_1,"restecg_2":restecg_2,"exang_1":exang_1,"slope_2":slope_2,"slope_3":slope_3,"ca_1":ca_1 ,"ca_2":ca_2,"ca_3":ca_3,"thal_6":thal_6 ,"thal_7":thal_7}
             df_data=pd.DataFrame(dic,columns=['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'sex_1', 'cp_2', 'cp_3', 'cp_4', 'fbs_1','restecg_1','restecg_2','exang_1', 'slope_2', 'slope_3', 'ca_1', 'ca_2', 'ca_3', 'thal_6', 'thal_7'],index=[0])
-            #print(df_data)
-            with open("standardScalar.sav",'rb') as f:
-            	scalar = pickle.load(f)
+           
+            prediction=predict_log(df_data)
 
-            col_scal=['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
-            #df_data[col_scal] = scalar.transform(df_data[col_scal])
-            print(df_data)
-            with open("modelForPrediction.sav",'rb') as f:
-                model=pickle.load(f)
-            prediction=model.predict(df_data)
-            print("Preditcion",prediction[0])
-
-
-            # filename="modelForPrediction.sav"
-            # loaded_model=pickle.load(open(filename,'rb'))
-            # prediction=loaded_model.predict([[age_scaled, trestbps_scaled, chol_scaled, thalach_scaled, oldpeak_scaled, sex_1,cp_2, cp_3, cp_4, fbs_1,
-            #                                   restecg_1, restecg_2, exang_1,slope_2,slope_3,ca_1,ca_2,ca_3,thal_6,thal_7]])
-            # print("Prediction is ",prediction[0])
-            # if prediction[0]==0:
-            #     return render_template('result.html',result="No,Risk")
-            # else:
-            #     return render_template('result.html',result="Yes,Risk")
-        except Exception as e:
-            print("The exception message is- ",e)
-            return "something is wrong"
+            if prediction==0:
+            	return render_template('Heart Disease Classifier.html',result="No,Risk")
+            else:
+            	return render_template('Heart Disease Classifier.html',result="Yes,Risk")
+        
+        except ValueError:
+        	return Response("Value not found")
+    	except Exception as e:
+        	print('exception is   ',e)
+        	return Response(e)
     else:
         return render_template('Heart Disease Classifier.html')
+
 app.run(debug=True)
 
 
