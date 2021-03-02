@@ -1,21 +1,26 @@
-from flask import Flask,request,render_template
-from sklearn.preprocessing import StandardScaler
+from flask import Flask,request,render_template,Response
 import pandas as pd
 
 
 import pickle
 app=Flask(__name__)
+app.config['DEBUG'] = True
 
 
 def predict_log(df):
-	with open("standardScalar.sav",'rb') as f:
-    	scaler = pickle.load(f)
+    with open("standardScalar.sav",'rb') as f:
+        scaler = pickle.load(f)
     col_scale=['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
     df[col_scale] = scaler.transform(df[col_scale])
+    print(df)
     with open("modelForPrediction.sav",'rb') as f:
         model=pickle.load(f)
     prediction=model.predict(df)
-    return prediction[0]
+    if prediction[0] == 0:
+        result = 'No,Risk'
+    else :
+        result = 'Yes,risk'
+    return result
 
 
 @app.route("/",methods=['GET'])
@@ -112,19 +117,21 @@ def prediction():
            
             prediction=predict_log(df_data)
 
-            if prediction==0:
-            	return render_template('Heart Disease Classifier.html',result="No,Risk")
-            else:
-            	return render_template('Heart Disease Classifier.html',result="Yes,Risk")
+            return render_template('Heart Disease Classifier.html',result=prediction)
         
         except ValueError:
-        	return Response("Value not found")
-    	except Exception as e:
-        	print('exception is   ',e)
-        	return Response(e)
+            return Response("Value not found")
+        except Exception as e:
+            print('exception is   ',e)
+            return Response(e)
     else:
         return render_template('Heart Disease Classifier.html')
 
-app.run(debug=True)
+
+if __name__ == "__main__":
+    host = '0.0.0.0'
+    port = 5000
+    app.run(debug=True)
+
 
 
