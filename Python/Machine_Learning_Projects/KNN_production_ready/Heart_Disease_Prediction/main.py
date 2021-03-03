@@ -81,7 +81,7 @@ def prediction():
             else:
                 exang_1=1
 
-            oldpeak=int(request.form['oldpeak'])
+            oldpeak=float(request.form['oldpeak'])
            
 
             slope=int(request.form['slope'])
@@ -114,7 +114,8 @@ def prediction():
            
             dic={'age':age,'trestbps': trestbps,'chol':chol,'thalach':thalach, 'oldpeak':oldpeak,"sex_1":sex_1,"cp_2":cp_2,"cp_3":cp_3,"cp_4":cp_4,"fbs_1":fbs_1,"restecg_1":restecg_1,"restecg_2":restecg_2,"exang_1":exang_1,"slope_2":slope_2,"slope_3":slope_3,"ca_1":ca_1 ,"ca_2":ca_2,"ca_3":ca_3,"thal_6":thal_6 ,"thal_7":thal_7}
             df_data=pd.DataFrame(dic,columns=['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'sex_1', 'cp_2', 'cp_3', 'cp_4', 'fbs_1','restecg_1','restecg_2','exang_1', 'slope_2', 'slope_3', 'ca_1', 'ca_2', 'ca_3', 'thal_6', 'thal_7'],index=[0])
-           
+
+            print(dic)
             prediction=predict_log(df_data)
 
             return render_template('Heart Disease Classifier.html',result=prediction)

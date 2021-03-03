@@ -6,6 +6,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 		<title>Heart Disease Test</title>
+		<link rel="shortcut icon" href="https://prediction-of-diabetes.herokuapp.com/static/diabetes-favicon.ico">
 	</head>
 	<body style="background-color:lightgreen;">
 	<!-- Java Script -->	
@@ -15,18 +16,40 @@
 
 		
 		<!-- Navbar-->
-		<nav class="navbar navbar-dark bg-dark">
-			<span class="navbar-brand mb-0 h1"><b>Heart Disease Test</b></span>
-			<span class="navbar-text">Navbar text with an inline element</span>
-		</nav>
+			<nav class="navbar navbar-dark bg-secondary">
+		<span class="navbar-brand mb-0 h1"><b>Heart Disease Test</b></span>
+
+<ul class="nav navbar-nav ml-auto">
+	<li>
+  <a class="navbar-brand" href="https://www.google.com/" target="_blank">
+    <img src="https://raw.githubusercontent.com/Automattic/social-logos/master/svg-min/github.svg" width="30" height="30" alt="">
+  </a>
+  <a class="navbar-brand" href="https://www.google.com/" target="_blank">
+    <img src="https://raw.githubusercontent.com/Automattic/social-logos/master/svg-min/medium.svg" width="30" height="30" alt="">
+  </a>
+  <a class="navbar-brand" href="https://www.google.com/" target="_blank">
+    <img src="https://raw.githubusercontent.com/Automattic/social-logos/master/svg-min/linkedin.svg" width="30" height="30" alt="">
+  </a>
+</li>
+</ul>
+
+
+</nav>
 		
 		<div class="container" >
 			
 			<br>
+
+			 <div class="container">
+            <h2 class="container-heading" align="center"><span class="heading_font">Heart Disease Test Form</span></h2>
+            <div class = "description" align="center">
+                <p>A Machine Learning web app built with Flask and Deployed on Heroku Cloud</p>
+            </div>
+        </div>
 			<!--Form-->
 			<form action = "/predict" method ="POST" >
 				<fieldset>
-				<legend align='center'><b>Heart Disease Test Form</b></legend><br>
+				
 				  <div class="card card-body" style="width: 948px ;margin-left: 50px; margin-right:-; " >
 					  <div class="form-group  row">
 
